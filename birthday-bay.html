@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <title>Happy Birthday Card</title>
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: linear-gradient(to bottom right, #e0f7ff, #b3d9ff);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      width: 350px;
+      height: 500px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s;
+    }
+
+    .card.opened .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .card-front {
+      background: #cceeff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-front img {
+      width: 80%;
+      border-radius: 10px;
+    }
+
+    .card-front p {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #004488;
+    }
+
+    .card-back {
+      background: #ffffff;
+      transform: rotateY(180deg);
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .card-back h2 {
+      color: #0055aa;
+      margin-top: 0;
+    }
+
+    .card-back img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card" onclick="toggleCard(this)">
+  <div class="card-inner">
+    <div class="card-front">
+      <p>HAPPY BIRTHDAY BAY</p>
+      <img src="images/S__10.jpg" alt="Card Front">
+      <p>คลิกเพื่อเปิดการ์ด และอย่าลืมเปิดเสียงน้า</p>
+    </div>
+    <div class="card-back">
+      <h2>สุขสันต์วันเกิดเด็กน้อย! 🎂</h2>
+      <audio id="greetingAudio" autoplay>
+        <source src="voice/HapBay.mp3" type="audio/mpeg">
+        เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง
+      </audio>
+      <img id="slideshowImage" src="" alt="Birthday Slide">
+        <p style="color: #004488;">Wishing you a birthday with happy and may all your soon turn into finally, Good luck</p>
+    </div>
+  </div>
+</div>
+
+<script>
+
+    const canvas = document.getElementById("fireworksCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+});
+
+function toggleCard(card) {
+  const images = [
+    "images/S__1.jpg",
+    "images/S__2.jpg",
+    "images/S__4.jpg",
+    "images/S__5.jpg",
+    "images/S__6.jpg",
+    "images/S__7.jpg",
+    "images/S__8.jpg",
+    "images/S__9.jpg",
+    "images/S__12.jpg",
+    "images/S__13.jpg"
+  ];
+
+  let currentImage = 0;
+  let slideInterval;
+
+  card.classList.toggle('opened');
+
+  if (card.classList.contains('opened')) {
+    // เริ่มเล่นเสียง
+    document.getElementById("greetingAudio").play();
+
+    // เริ่มแสดงภาพสไลด์
+    const imgEl = document.getElementById("slideshowImage");
+    imgEl.src = images[currentImage];
+    slideInterval = setInterval(() => {
+      currentImage = (currentImage + 1) % images.length;
+      imgEl.src = images[currentImage];
+    }, 5000);
+  } else {
+    // ปิดเสียงและสไลด์
+    document.getElementById("greetingAudio").pause();
+    clearInterval(slideInterval);
+    currentImage = 0;
+  }
+}
+  </script>
+</body>
+</html>
